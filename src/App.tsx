@@ -1,24 +1,28 @@
-import { useState } from "react";
-
+import { useEffect, useReducer } from "react";
+import { store } from "./store";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => forceUpdate());
+
+    return unsubscribe;
+  }, []);
 
   return (
     <>
       <h1>Vite + React</h1>
+      counter: {store.getState().counter}
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button onClick={() => store.dispatch({ type: "increment" })}>
+          increment
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button onClick={() => store.dispatch({ type: "decrement" })}>
+          decrement
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
