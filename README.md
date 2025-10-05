@@ -200,3 +200,37 @@
         "3": { "id": "3", "name": "Charlie", "age": 22 }
       }
     }
+
+----------
+
+## Альтернатива: использование createAppSelector
+
+
+    const selectUserById = createAppSelector(
+      state => state.users,
+      (_, userId: UserId) => userId,
+      (users, userId) => users.find(user => user.id === userId)
+    );
+    
+    const user = useAppSelector(state => selectUserById(state, userId));
+    
+### Что здесь происходит
+
+-   `createAppSelector` — это просто алиас над `createSelector`, обёрнутый под твой `useAppSelector`.
+    
+-   Селектор принимает:
+    
+    1.  всё состояние `state.users`,
+        
+    2.  `userId` (второй аргумент),
+        
+    3.  вычисляющую функцию: ищет нужного пользователя.
+        
+
+### Преимущества
+
+-   **Мемоизация по `userId`** — пока `state.users` и `userId` не изменились, вычисления (`find`) не выполняются заново.
+    
+-   Это **устраняет лишние ререндеры** и делает селектор **O(1)** по времени при повторных вызовах.
+    
+-   Код остаётся декларативным и читаемым.
