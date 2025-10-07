@@ -1,27 +1,40 @@
 import { useState } from "react";
 import { UserListItem } from "./UserListItem";
 import { SelectedUser } from "./SelectedUser";
-import { useAppSelector } from "./store";
+import { createAppSelector, useAppSelector, type AppState } from "./store";
 import "./UsersList.css";
 
+const selectSortedUsers = createAppSelector(
+  (state: AppState) => state.users.ids,
+  (state: AppState) => state.users.entries,
+  (_: AppState, sort: "asc" | "desc") => sort,
+  (ids, entries, sort) =>
+    ids
+      .map((id) => entries[id])
+      .sort((a, b) => {
+        if (sort === "asc") {
+          return a.name.localeCompare(b.name);
+        } else {
+          return b.name.localeCompare(a.name);
+        }
+      })
+);
+
+const selectSelectedUser = (state: AppState) =>
+  state.users.selectedUserId
+    ? state.users.entries[state.users.selectedUserId]
+    : undefined;
+
 export function UsersList() {
+  console.log("render users list");
+
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
-  const ids = useAppSelector((state) => state.users.ids);
-  const entries = useAppSelector((state) => state.users.entries);
-  const selectedUserId = useAppSelector((state) => state.users.selectedUserId);
+  const sortedUsers = useAppSelector((state) =>
+    selectSortedUsers(state, sortType)
+  );
 
-  const selectedUser = selectedUserId ? entries[selectedUserId] : undefined;
-
-  const sortedUsers = ids
-    .map((id) => entries[id])
-    .sort((a, b) => {
-      if (sortType === "asc") {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
+  const selectedUser = useAppSelector(selectSelectedUser);
 
   return (
     <div className="container">
