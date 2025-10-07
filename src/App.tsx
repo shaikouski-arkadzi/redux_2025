@@ -1,4 +1,5 @@
 import { Counter } from "./Counter";
+import { UsersList } from "./UsersList";
 import "./App.css";
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <>
       <Counter counterId="first" />
       <Counter counterId="second" />
+      <UsersList />
     </>
   );
 }

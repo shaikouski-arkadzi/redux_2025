@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.btn {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-spacing {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}

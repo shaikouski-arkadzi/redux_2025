@@ -1,0 +1,14 @@
+.user-item {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.user-name {
+  cursor: pointer;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.user-name:hover {
+  text-decoration: underline;
+}
