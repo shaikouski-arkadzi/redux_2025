@@ -1,29 +1,9 @@
 import { useState } from "react";
 import { UserListItem } from "./UserListItem";
 import { SelectedUser } from "./SelectedUser";
-import { createAppSelector, useAppSelector, type AppState } from "./store";
+import { useAppSelector } from "../../store";
+import { selectSelectedUser, selectSortedUsers } from "./users.slice";
 import "./UsersList.css";
-
-const selectSortedUsers = createAppSelector(
-  (state: AppState) => state.users.ids,
-  (state: AppState) => state.users.entries,
-  (_: AppState, sort: "asc" | "desc") => sort,
-  (ids, entries, sort) =>
-    ids
-      .map((id) => entries[id])
-      .sort((a, b) => {
-        if (sort === "asc") {
-          return a.name.localeCompare(b.name);
-        } else {
-          return b.name.localeCompare(a.name);
-        }
-      })
-);
-
-const selectSelectedUser = (state: AppState) =>
-  state.users.selectedUserId
-    ? state.users.entries[state.users.selectedUserId]
-    : undefined;
 
 export function UsersList() {
   console.log("render users list");

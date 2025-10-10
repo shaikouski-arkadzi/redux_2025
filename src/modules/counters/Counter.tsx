@@ -1,6 +1,6 @@
-import { selectCounter, useAppSelector, type CounterId } from "./store";
 import { useDispatch } from "react-redux";
-import "./App.css";
+import { useAppSelector } from "../../store";
+import { selectCounter, type CounterId } from "./counters.slice";
 
 export function Counter({ counterId }: { counterId: CounterId }) {
   const dispatch = useDispatch();

@@ -1,5 +1,6 @@
-import { useAppDispatch, type UserSelectedAction } from "./store";
+import { useAppDispatch } from "../../store";
 import type { User } from "./user.types";
+import type { UserSelectedAction } from "./users.slice";
 import "./UserListItem.css";
 
 export function UserListItem({ user }: { user: User }) {

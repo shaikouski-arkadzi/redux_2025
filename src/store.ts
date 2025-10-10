@@ -1,140 +1,11 @@
-import {
-  combineReducers,
-  configureStore,
-  createSelector,
-} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import type { User, UserId } from "./user.types";
-
-const users: User[] = Array.from({ length: 3000 }, (_, index) => ({
-  id: `user${index + 11}`,
-  name: `User ${index + 11}`,
-  description: `Description for User ${index + 11}`,
-}));
-
-type UsersState = {
-  entries: Record<UserId, User>;
-  ids: UserId[];
-  selectedUserId: UserId | undefined;
-};
-
-type CounterState = {
-  counter: number;
-};
-
-type CountersState = Record<CounterId, CounterState | undefined>;
-
-export type CounterId = string;
-
-export type UserSelectedAction = {
-  type: "userSelected";
-  payload: {
-    userId: UserId;
-  };
-};
-
-export type UserRemoveSelectedAction = {
-  type: "userRemoveSelected";
-};
-
-export type UsersStoredAction = {
-  type: "userStored";
-  payload: {
-    users: User[];
-  };
-};
-
-export type IncrementAction = {
-  type: "increment";
-  payload: {
-    counterId: CounterId;
-  };
-};
-
-export type DecrementAction = {
-  type: "decrement";
-  payload: {
-    counterId: CounterId;
-  };
-};
-
-type Action =
-  | IncrementAction
-  | DecrementAction
-  | UserSelectedAction
-  | UserRemoveSelectedAction
-  | UsersStoredAction;
-
-const initialUserState: UsersState = {
-  entries: {},
-  ids: [],
-  selectedUserId: undefined,
-};
-const initialCounterState: CounterState = { counter: 0 };
-const initialCountersState: CountersState = {};
-
-const usersReducer = (state = initialUserState, action: Action): UsersState => {
-  switch (action.type) {
-    case "userStored": {
-      const { users } = action.payload;
-      return {
-        ...state,
-        entries: users.reduce((acc, user) => {
-          acc[user.id] = user;
-          return acc;
-        }, {} as Record<UserId, User>),
-        ids: users.map((user) => user.id),
-      };
-    }
-    case "userSelected": {
-      const { userId } = action.payload;
-      return {
-        ...state,
-        selectedUserId: userId,
-      };
-    }
-    case "userRemoveSelected": {
-      return {
-        ...state,
-        selectedUserId: undefined,
-      };
-    }
-    default:
-      return state;
-  }
-};
-
-const countersReducer = (
-  state = initialCountersState,
-  action: Action
-): CountersState => {
-  switch (action.type) {
-    case "increment": {
-      const { counterId } = action.payload;
-      const currentCounter = state[counterId] ?? initialCounterState;
-      return {
-        ...state,
-        [counterId]: {
-          ...currentCounter,
-          counter: currentCounter.counter + 1,
-        },
-      };
-    }
-    case "decrement": {
-      const { counterId } = action.payload;
-      const currentCounter = state[counterId] ?? initialCounterState;
-      return {
-        ...state,
-        [counterId]: {
-          ...currentCounter,
-          counter: currentCounter.counter - 1,
-        },
-      };
-    }
-    default:
-      return state;
-  }
-};
+import {
+  usersReducer,
+  type UsersStoredAction,
+  initialUsersList,
+} from "./modules/users/users.slice";
+import { countersReducer } from "./modules/counters/counters.slice";
 
 const reducer = combineReducers({
   users: usersReducer,
@@ -147,11 +18,8 @@ export const store = configureStore({
 
 store.dispatch({
   type: "userStored",
-  payload: { users },
+  payload: { users: initialUsersList },
 } satisfies UsersStoredAction);
-
-export const selectCounter = (state: AppState, counterId: CounterId) =>
-  state.counters[counterId];
 
 export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -159,4 +27,3 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppSelector = useSelector.withTypes<AppState>();
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppStore = useStore.withTypes<typeof store>();
-export const createAppSelector = createSelector.withTypes<AppState>();

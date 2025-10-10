@@ -1,5 +1,6 @@
 import type { User } from "./user.types";
-import { useAppDispatch, type UserRemoveSelectedAction } from "./store";
+import { useAppDispatch } from "../../store";
+import type { UserRemoveSelectedAction } from "./users.slice";
 import "./SelectedUser.css";
 
 export function SelectedUser({ user }: { user: User }) {
