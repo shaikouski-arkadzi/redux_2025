@@ -6,6 +6,7 @@ import {
   selectCounter,
   type CounterId,
 } from "./counters.slice";
+import { bindActionCreators } from "@reduxjs/toolkit";
 
 export function Counter({ counterId }: { counterId: CounterId }) {
   const dispatch = useDispatch();
@@ -14,14 +15,19 @@ export function Counter({ counterId }: { counterId: CounterId }) {
     selectCounter(state, counterId)
   );
 
+  const actions = bindActionCreators(
+    { incrementAction, decrementAction },
+    dispatch
+  );
+
   return (
     <>
       counter: {counterState?.counter}
       <div className="card">
-        <button onClick={() => dispatch(incrementAction({ counterId }))}>
+        <button onClick={() => actions.incrementAction({ counterId })}>
           increment
         </button>
-        <button onClick={() => dispatch(decrementAction({ counterId }))}>
+        <button onClick={() => actions.decrementAction({ counterId })}>
           decrement
         </button>
       </div>
