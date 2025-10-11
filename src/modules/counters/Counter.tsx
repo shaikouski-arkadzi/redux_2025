@@ -1,6 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../store";
-import { selectCounter, type CounterId } from "./counters.slice";
+import {
+  decrementAction,
+  incrementAction,
+  selectCounter,
+  type CounterId,
+} from "./counters.slice";
 
 export function Counter({ counterId }: { counterId: CounterId }) {
   const dispatch = useDispatch();
@@ -13,18 +18,10 @@ export function Counter({ counterId }: { counterId: CounterId }) {
     <>
       counter: {counterState?.counter}
       <div className="card">
-        <button
-          onClick={() =>
-            dispatch({ type: "increment", payload: { counterId } })
-          }
-        >
+        <button onClick={() => dispatch(incrementAction({ counterId }))}>
           increment
         </button>
-        <button
-          onClick={() =>
-            dispatch({ type: "decrement", payload: { counterId } })
-          }
-        >
+        <button onClick={() => dispatch(decrementAction({ counterId }))}>
           decrement
         </button>
       </div>
