@@ -1,16 +1,17 @@
-import { useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../store.types";
 import type { User } from "./user.types";
-import type { UserSelectedAction } from "./users.slice";
+import { usersSlice } from "./users.slice";
 import "./UserListItem.css";
 
 export function UserListItem({ user }: { user: User }) {
   const dispatch = useAppDispatch();
 
   const handleUserClick = () => {
-    dispatch({
-      type: "userSelected",
-      payload: { userId: user.id },
-    } satisfies UserSelectedAction);
+    dispatch(
+      usersSlice.actions.selected({
+        userId: user.id,
+      })
+    );
   };
 
   return (

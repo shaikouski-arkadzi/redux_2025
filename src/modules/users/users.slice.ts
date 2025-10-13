@@ -1,5 +1,8 @@
-import { createAppSelector } from "../../appSelector";
-import { type AppState } from "../../store";
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type { User, UserId } from "./user.types";
 
 export const initialUsersList: User[] = Array.from(
@@ -35,65 +38,49 @@ export type UsersStoredAction = {
   };
 };
 
-type Action = UserSelectedAction | UserRemoveSelectedAction | UsersStoredAction;
-
 const initialUserState: UsersState = {
   entries: {},
   ids: [],
   selectedUserId: undefined,
 };
 
-export const usersReducer = (
-  state = initialUserState,
-  action: Action
-): UsersState => {
-  switch (action.type) {
-    case "userStored": {
+export const usersSlice = createSlice({
+  name: "users",
+  initialState: initialUserState,
+  selectors: {
+    selectSelectedUser: (state) =>
+      state.selectedUserId ? state.entries[state.selectedUserId] : undefined,
+    selectSortedUsers: createSelector(
+      (state: UsersState) => state.ids,
+      (state: UsersState) => state.entries,
+      (_: UsersState, sort: "asc" | "desc") => sort,
+      (ids, entries, sort) =>
+        ids
+          .map((id) => entries[id])
+          .sort((a, b) => {
+            if (sort === "asc") {
+              return a.name.localeCompare(b.name);
+            } else {
+              return b.name.localeCompare(a.name);
+            }
+          })
+    ),
+  },
+  reducers: {
+    selected: (state, action: PayloadAction<{ userId: UserId }>) => {
+      state.selectedUserId = action.payload.userId;
+    },
+    selectRemove: (state) => {
+      state.selectedUserId = undefined;
+    },
+    stored: (state, action: PayloadAction<{ users: User[] }>) => {
       const { users } = action.payload;
-      return {
-        ...state,
-        entries: users.reduce((acc, user) => {
-          acc[user.id] = user;
-          return acc;
-        }, {} as Record<UserId, User>),
-        ids: users.map((user) => user.id),
-      };
-    }
-    case "userSelected": {
-      const { userId } = action.payload;
-      return {
-        ...state,
-        selectedUserId: userId,
-      };
-    }
-    case "userRemoveSelected": {
-      return {
-        ...state,
-        selectedUserId: undefined,
-      };
-    }
-    default:
-      return state;
-  }
-};
 
-export const selectSortedUsers = createAppSelector(
-  (state: AppState) => state.users.ids,
-  (state: AppState) => state.users.entries,
-  (_: AppState, sort: "asc" | "desc") => sort,
-  (ids, entries, sort) =>
-    ids
-      .map((id) => entries[id])
-      .sort((a, b) => {
-        if (sort === "asc") {
-          return a.name.localeCompare(b.name);
-        } else {
-          return b.name.localeCompare(a.name);
-        }
-      })
-);
-
-export const selectSelectedUser = (state: AppState) =>
-  state.users.selectedUserId
-    ? state.users.entries[state.users.selectedUserId]
-    : undefined;
+      state.entries = users.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {} as Record<UserId, User>);
+      state.ids = users.map((user) => user.id);
+    },
+  },
+});

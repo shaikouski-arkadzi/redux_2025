@@ -1,15 +1,13 @@
 import type { User } from "./user.types";
-import { useAppDispatch } from "../../store";
-import type { UserRemoveSelectedAction } from "./users.slice";
+import { useAppDispatch } from "../../store.types";
+import { usersSlice } from "./users.slice";
 import "./SelectedUser.css";
 
 export function SelectedUser({ user }: { user: User }) {
   const dispatch = useAppDispatch();
 
   const handleBackButtonClick = () => {
-    dispatch({
-      type: "userRemoveSelected",
-    } satisfies UserRemoveSelectedAction);
+    dispatch(usersSlice.actions.selectRemove());
   };
 
   return (

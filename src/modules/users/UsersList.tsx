@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { UserListItem } from "./UserListItem";
 import { SelectedUser } from "./SelectedUser";
-import { useAppSelector } from "../../store";
-import { selectSelectedUser, selectSortedUsers } from "./users.slice";
+import { useAppSelector } from "../../store.types";
+import { usersSlice } from "./users.slice";
 import "./UsersList.css";
 
 export function UsersList() {
@@ -11,10 +11,10 @@ export function UsersList() {
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
   const sortedUsers = useAppSelector((state) =>
-    selectSortedUsers(state, sortType)
+    usersSlice.selectors.selectSortedUsers(state, sortType)
   );
 
-  const selectedUser = useAppSelector(selectSelectedUser);
+  const selectedUser = useAppSelector(usersSlice.selectors.selectSelectedUser);
 
   return (
     <div className="container">
