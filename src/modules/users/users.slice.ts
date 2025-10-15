@@ -5,43 +5,18 @@ import {
 } from "@reduxjs/toolkit";
 import type { User, UserId } from "./user.types";
 
-export const initialUsersList: User[] = Array.from(
-  { length: 3000 },
-  (_, index) => ({
-    id: `user${index + 11}`,
-    name: `User ${index + 11}`,
-    description: `Description for User ${index + 11}`,
-  })
-);
-
 type UsersState = {
   entries: Record<UserId, User>;
   ids: UserId[];
   selectedUserId: UserId | undefined;
-};
-
-export type UserSelectedAction = {
-  type: "userSelected";
-  payload: {
-    userId: UserId;
-  };
-};
-
-export type UserRemoveSelectedAction = {
-  type: "userRemoveSelected";
-};
-
-export type UsersStoredAction = {
-  type: "userStored";
-  payload: {
-    users: User[];
-  };
+  fetchUsersStatus: "idle" | "pending" | "success" | "failed";
 };
 
 const initialUserState: UsersState = {
   entries: {},
   ids: [],
   selectedUserId: undefined,
+  fetchUsersStatus: "idle",
 };
 
 export const usersSlice = createSlice({
@@ -65,6 +40,8 @@ export const usersSlice = createSlice({
             }
           })
     ),
+    selectIsFetchUsersPending: (state) => state.fetchUsersStatus === "pending",
+    selectIsFetchUsersIdle: (state) => state.fetchUsersStatus === "idle",
   },
   reducers: {
     selected: (state, action: PayloadAction<{ userId: UserId }>) => {
@@ -73,14 +50,20 @@ export const usersSlice = createSlice({
     selectRemove: (state) => {
       state.selectedUserId = undefined;
     },
-    stored: (state, action: PayloadAction<{ users: User[] }>) => {
+    fetchUsersPending: (state) => {
+      state.fetchUsersStatus = "pending";
+    },
+    fetchUsersSuccess: (state, action: PayloadAction<{ users: User[] }>) => {
       const { users } = action.payload;
-
+      state.fetchUsersStatus = "success";
       state.entries = users.reduce((acc, user) => {
         acc[user.id] = user;
         return acc;
       }, {} as Record<UserId, User>);
       state.ids = users.map((user) => user.id);
+    },
+    fetchUsersFailed: (state) => {
+      state.fetchUsersStatus = "failed";
     },
   },
 });

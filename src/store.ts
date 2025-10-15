@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { initialUsersList, usersSlice } from "./modules/users/users.slice";
+import { usersSlice } from "./modules/users/users.slice";
 import { countersReducer } from "./modules/counters/counters.slice";
 
 export const store = configureStore({
@@ -8,5 +8,3 @@ export const store = configureStore({
     counters: countersReducer,
   },
 });
-
-store.dispatch(usersSlice.actions.stored({ users: initialUsersList }));
