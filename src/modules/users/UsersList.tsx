@@ -16,7 +16,7 @@ export function UsersList() {
   );
 
   useEffect(() => {
-    dispatch(fetchUsers);
+    dispatch(fetchUsers());
   }, [dispatch, appStore]);
 
   const sortedUsers = useAppSelector((state) =>
