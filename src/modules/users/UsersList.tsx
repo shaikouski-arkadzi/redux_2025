@@ -3,9 +3,8 @@ import { UserListItem } from "./UserListItem";
 import { SelectedUser } from "./SelectedUser";
 import { useAppDispatch, useAppSelector, useAppStore } from "../../store.types";
 import { usersSlice } from "./users.slice";
-import { api } from "../../shared/api";
-import "./UsersList.css";
 import { fetchUsers } from "./utils/fetch-users";
+import "./UsersList.css";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
@@ -17,7 +16,7 @@ export function UsersList() {
   );
 
   useEffect(() => {
-    fetchUsers(dispatch, appStore.getState);
+    dispatch(fetchUsers);
   }, [dispatch, appStore]);
 
   const sortedUsers = useAppSelector((state) =>
