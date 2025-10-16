@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 import { UserListItem } from "./UserListItem";
 import { SelectedUser } from "./SelectedUser";
-import { useAppDispatch, useAppSelector } from "../../store.types";
+import { useAppDispatch, useAppSelector, useAppStore } from "../../store.types";
 import { usersSlice } from "./users.slice";
 import { api } from "../../shared/api";
 import "./UsersList.css";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
+  const appStore = useAppStore();
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
   const isPending = useAppSelector(
     usersSlice.selectors.selectIsFetchUsersPending
   );
-  const isIdle = useAppSelector(usersSlice.selectors.selectIsFetchUsersIdle);
 
   useEffect(() => {
+    const isIdle = usersSlice.selectors.selectIsFetchUsersIdle(
+      appStore.getState()
+    );
     if (!isIdle) return;
 
     dispatch(usersSlice.actions.fetchUsersPending());
@@ -27,7 +30,7 @@ export function UsersList() {
       .catch(() => {
         dispatch(usersSlice.actions.fetchUsersFailed());
       });
-  }, [dispatch, isIdle]);
+  }, [dispatch, appStore]);
 
   const sortedUsers = useAppSelector((state) =>
     usersSlice.selectors.selectSortedUsers(state, sortType)
