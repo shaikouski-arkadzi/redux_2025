@@ -23,13 +23,15 @@ export function UsersList() {
     usersSlice.selectors.selectSortedUsers(state, sortType)
   );
 
-  const selectedUser = useAppSelector(usersSlice.selectors.selectSelectedUser);
+  const selectedUserId = useAppSelector(
+    usersSlice.selectors.selectSelectedUserId
+  );
 
   if (isPending) return <div>Loading</div>;
 
   return (
     <div className="container">
-      {!selectedUser ? (
+      {!selectedUserId ? (
         <div className="user-list-container">
           <div className="sort-buttons">
             <button onClick={() => setSortType("asc")} className="btn">
@@ -49,7 +51,7 @@ export function UsersList() {
           </ul>
         </div>
       ) : (
-        <SelectedUser user={selectedUser} />
+        <SelectedUser userId={selectedUserId} />
       )}
     </div>
   );

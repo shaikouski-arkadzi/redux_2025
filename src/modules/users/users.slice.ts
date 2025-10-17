@@ -23,8 +23,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: initialUserState,
   selectors: {
-    selectSelectedUser: (state) =>
-      state.selectedUserId ? state.entries[state.selectedUserId] : undefined,
+    selectSelectedUserId: (state) => state.selectedUserId,
     selectSortedUsers: createSelector(
       (state: UsersState) => state.ids,
       (state: UsersState) => state.entries,

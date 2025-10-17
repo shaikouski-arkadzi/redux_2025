@@ -1,10 +1,12 @@
-import type { User } from "./user.types";
-import { useAppDispatch } from "../../store.types";
+import type { UserId } from "./user.types";
+import { useAppDispatch, useAppSelector } from "../../store.types";
 import { usersSlice } from "./users.slice";
 import "./SelectedUser.css";
 
-export function SelectedUser({ user }: { user: User }) {
+export function SelectedUser({ userId }: { userId: UserId }) {
   const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state) => state.users.entries[userId]);
 
   const handleBackButtonClick = () => {
     dispatch(usersSlice.actions.selectRemove());
