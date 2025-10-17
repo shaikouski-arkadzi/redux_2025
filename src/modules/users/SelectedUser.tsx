@@ -1,15 +1,19 @@
+import { useNavigate, useParams } from "react-router-dom";
 import type { UserId } from "./user.types";
-import { useAppDispatch, useAppSelector } from "../../store.types";
+import { useAppSelector } from "../../store.types";
 import { usersSlice } from "./users.slice";
 import "./SelectedUser.css";
 
-export function SelectedUser({ userId }: { userId: UserId }) {
-  const dispatch = useAppDispatch();
+export function SelectedUser() {
+  const navigate = useNavigate();
+  const { id = "" } = useParams<{ id: UserId }>();
 
-  const user = useAppSelector((state) => state.users.entries[userId]);
+  const user = useAppSelector((state) =>
+    usersSlice.selectors.selectUserById(state, id)
+  );
 
   const handleBackButtonClick = () => {
-    dispatch(usersSlice.actions.selectRemove());
+    navigate("..", { relative: "path" });
   };
 
   return (

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { UserListItem } from "./UserListItem";
-import { SelectedUser } from "./SelectedUser";
 import { useAppDispatch, useAppSelector, useAppStore } from "../../store.types";
 import { usersSlice } from "./users.slice";
 import { fetchUsers } from "./utils/fetch-users";
@@ -23,36 +22,28 @@ export function UsersList() {
     usersSlice.selectors.selectSortedUsers(state, sortType)
   );
 
-  const selectedUserId = useAppSelector(
-    usersSlice.selectors.selectSelectedUserId
-  );
-
   if (isPending) return <div>Loading</div>;
 
   return (
     <div className="container">
-      {!selectedUserId ? (
-        <div className="user-list-container">
-          <div className="sort-buttons">
-            <button onClick={() => setSortType("asc")} className="btn">
-              Asc
-            </button>
-            <button
-              onClick={() => setSortType("desc")}
-              className="btn btn-spacing"
-            >
-              Desc
-            </button>
-          </div>
-          <ul className="user-list">
-            {sortedUsers.map((user) => (
-              <UserListItem user={user} key={user.id} />
-            ))}
-          </ul>
+      <div className="user-list-container">
+        <div className="sort-buttons">
+          <button onClick={() => setSortType("asc")} className="btn">
+            Asc
+          </button>
+          <button
+            onClick={() => setSortType("desc")}
+            className="btn btn-spacing"
+          >
+            Desc
+          </button>
         </div>
-      ) : (
-        <SelectedUser userId={selectedUserId} />
-      )}
+        <ul className="user-list">
+          {sortedUsers.map((user) => (
+            <UserListItem user={user} key={user.id} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

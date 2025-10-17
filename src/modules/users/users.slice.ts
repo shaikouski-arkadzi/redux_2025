@@ -8,14 +8,12 @@ import type { User, UserId } from "./user.types";
 type UsersState = {
   entries: Record<UserId, User>;
   ids: UserId[];
-  selectedUserId: UserId | undefined;
   fetchUsersStatus: "idle" | "pending" | "success" | "failed";
 };
 
 const initialUserState: UsersState = {
   entries: {},
   ids: [],
-  selectedUserId: undefined,
   fetchUsersStatus: "idle",
 };
 
@@ -23,7 +21,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: initialUserState,
   selectors: {
-    selectSelectedUserId: (state) => state.selectedUserId,
+    selectUserById: (state, userId: UserId) => state.entries[userId],
     selectSortedUsers: createSelector(
       (state: UsersState) => state.ids,
       (state: UsersState) => state.entries,
@@ -43,12 +41,6 @@ export const usersSlice = createSlice({
     selectIsFetchUsersIdle: (state) => state.fetchUsersStatus === "idle",
   },
   reducers: {
-    selected: (state, action: PayloadAction<{ userId: UserId }>) => {
-      state.selectedUserId = action.payload.userId;
-    },
-    selectRemove: (state) => {
-      state.selectedUserId = undefined;
-    },
     fetchUsersPending: (state) => {
       state.fetchUsersStatus = "pending";
     },
