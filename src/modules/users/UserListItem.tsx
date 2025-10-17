@@ -1,6 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import type { User } from "./user.types";
 import "./UserListItem.css";
-import { useNavigate } from "react-router-dom";
 
 export function UserListItem({ user }: { user: User }) {
   const navigate = useNavigate();

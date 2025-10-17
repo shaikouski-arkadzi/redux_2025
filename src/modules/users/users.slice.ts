@@ -6,15 +6,17 @@ import {
 import type { User, UserId } from "./user.types";
 
 type UsersState = {
-  entries: Record<UserId, User>;
+  entries: Record<UserId, User | undefined>;
   ids: UserId[];
   fetchUsersStatus: "idle" | "pending" | "success" | "failed";
+  fetchUserStatus: "idle" | "pending" | "success" | "failed";
 };
 
 const initialUserState: UsersState = {
   entries: {},
   ids: [],
   fetchUsersStatus: "idle",
+  fetchUserStatus: "idle",
 };
 
 export const usersSlice = createSlice({
@@ -29,6 +31,7 @@ export const usersSlice = createSlice({
       (ids, entries, sort) =>
         ids
           .map((id) => entries[id])
+          .filter((user): user is User => !!user)
           .sort((a, b) => {
             if (sort === "asc") {
               return a.name.localeCompare(b.name);
@@ -38,7 +41,9 @@ export const usersSlice = createSlice({
           })
     ),
     selectIsFetchUsersPending: (state) => state.fetchUsersStatus === "pending",
+    selectIsFetchUserPending: (state) => state.fetchUserStatus === "pending",
     selectIsFetchUsersIdle: (state) => state.fetchUsersStatus === "idle",
+    selectIsFetchUserIdle: (state) => state.fetchUserStatus === "idle",
   },
   reducers: {
     fetchUsersPending: (state) => {
@@ -55,6 +60,17 @@ export const usersSlice = createSlice({
     },
     fetchUsersFailed: (state) => {
       state.fetchUsersStatus = "failed";
+    },
+    fetchUserPending: (state) => {
+      state.fetchUserStatus = "pending";
+    },
+    fetchUserSuccess: (state, action: PayloadAction<{ user: User }>) => {
+      const { user } = action.payload;
+      state.fetchUserStatus = "success";
+      state.entries[user.id] = user;
+    },
+    fetchUserFailed: (state) => {
+      state.fetchUserStatus = "failed";
     },
   },
 });
