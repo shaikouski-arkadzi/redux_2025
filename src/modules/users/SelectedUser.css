@@ -5,7 +5,6 @@
 }
 
 .btn {
-  background-color: #3b82f6;
   color: white;
   font-weight: bold;
   padding: 8px 16px;
@@ -13,11 +12,23 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
   margin-bottom: 12px;
 }
 
-.btn:hover {
+.btn-primary:hover {
   background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #ef4444;
+}
+
+.btn-secondary:hover {
+  background-color: #b91c1c;
 }
 
 .user-name {

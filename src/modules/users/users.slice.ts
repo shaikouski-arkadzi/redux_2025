@@ -10,6 +10,7 @@ type UsersState = {
   ids: UserId[];
   fetchUsersStatus: "idle" | "pending" | "success" | "failed";
   fetchUserStatus: "idle" | "pending" | "success" | "failed";
+  deleteUserStatus: "idle" | "pending" | "success" | "failed";
 };
 
 const initialUserState: UsersState = {
@@ -17,6 +18,7 @@ const initialUserState: UsersState = {
   ids: [],
   fetchUsersStatus: "idle",
   fetchUserStatus: "idle",
+  deleteUserStatus: "idle",
 };
 
 export const usersSlice = createSlice({
@@ -42,6 +44,7 @@ export const usersSlice = createSlice({
     ),
     selectIsFetchUsersPending: (state) => state.fetchUsersStatus === "pending",
     selectIsFetchUserPending: (state) => state.fetchUserStatus === "pending",
+    selectIsDeleteUserPending: (state) => state.deleteUserStatus === "pending",
     selectIsFetchUsersIdle: (state) => state.fetchUsersStatus === "idle",
     selectIsFetchUserIdle: (state) => state.fetchUserStatus === "idle",
   },
@@ -71,6 +74,18 @@ export const usersSlice = createSlice({
     },
     fetchUserFailed: (state) => {
       state.fetchUserStatus = "failed";
+    },
+    deleteUserPending: (state) => {
+      state.deleteUserStatus = "pending";
+    },
+    deleteUserSuccess: (state, action: PayloadAction<{ userId: UserId }>) => {
+      const { userId } = action.payload;
+      delete state.entries[userId];
+      state.ids = state.ids.filter((id) => id !== userId);
+      state.deleteUserStatus = "success";
+    },
+    deleteUserFailed: (state) => {
+      state.deleteUserStatus = "failed";
     },
   },
 });
