@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import type { UserId } from "./user.types";
-import { useAppDispatch, useAppSelector } from "../../store.types";
+import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
 import { deleteUser } from "./utils/delete-user";
 import "./SelectedUser.css";

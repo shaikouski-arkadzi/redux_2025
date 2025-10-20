@@ -1,4 +1,4 @@
-import type { AppThunk } from "../../../store";
+import type { AppThunk } from "../../../app/store";
 import type { UserId } from "../user.types";
 import { usersSlice } from "../users.slice";
 import { fetchUsers } from "./fetch-users";

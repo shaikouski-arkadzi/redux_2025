@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserListItem } from "./UserListItem";
-import { useAppSelector } from "../../store.types";
+import { useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
 import "./UsersList.css";
 

@@ -3,8 +3,8 @@ import {
   type ThunkAction,
   type UnknownAction,
 } from "@reduxjs/toolkit";
-import { usersSlice } from "./modules/users/users.slice";
-import { countersReducer } from "./modules/counters/counters.slice";
+import { usersSlice } from "../modules/users/users.slice";
+import { countersReducer } from "../modules/counters/counters.slice";
 import type { AppState } from "./store.types";
 import { extraArgument } from "./extra-arguments";
 

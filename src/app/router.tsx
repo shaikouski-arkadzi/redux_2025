@@ -1,11 +1,11 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import { store } from "./store";
-import App from "./App";
-import { UsersList } from "./modules/users/UsersList";
-import { SelectedUser } from "./modules/users/SelectedUser";
-import { fetchUsers } from "./modules/users/utils/fetch-users";
-import { fetchUser } from "./modules/users/utils/fetch-user";
-import { Counters } from "./modules/counters/Counters";
+import App from "../App";
+import { UsersList } from "../modules/users/UsersList";
+import { SelectedUser } from "../modules/users/SelectedUser";
+import { fetchUsers } from "../modules/users/utils/fetch-users";
+import { fetchUser } from "../modules/users/utils/fetch-user";
+import { Counters } from "../modules/counters/Counters";
 
 const loadStore = () =>
   new Promise((resolve) => setTimeout(() => resolve(store), 0));
