@@ -1,9 +1,7 @@
-import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { UserId } from "./user.types";
 import { useAppDispatch, useAppSelector } from "../../store.types";
 import { usersSlice } from "./users.slice";
-import { fetchUser } from "./utils/fetch-user";
 import { deleteUser } from "./utils/delete-user";
 import "./SelectedUser.css";
 
@@ -23,10 +21,6 @@ export function SelectedUser() {
   const user = useAppSelector((state) =>
     usersSlice.selectors.selectUserById(state, id)
   );
-
-  useEffect(() => {
-    dispatch(fetchUser(id));
-  }, [dispatch, id]);
 
   const handleBackButtonClick = () => {
     navigate("..", { relative: "path" });

@@ -1,22 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserListItem } from "./UserListItem";
-import { useAppDispatch, useAppSelector, useAppStore } from "../../store.types";
+import { useAppSelector } from "../../store.types";
 import { usersSlice } from "./users.slice";
-import { fetchUsers } from "./utils/fetch-users";
 import "./UsersList.css";
 
 export function UsersList() {
-  const dispatch = useAppDispatch();
-  const appStore = useAppStore();
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
   const isPending = useAppSelector(
     usersSlice.selectors.selectIsFetchUsersPending
   );
-
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch, appStore]);
 
   const sortedUsers = useAppSelector((state) =>
     usersSlice.selectors.selectSortedUsers(state, sortType)
