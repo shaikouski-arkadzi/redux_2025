@@ -6,7 +6,7 @@ function App() {
     <>
       <header>
         <Link to="users">Users</Link>
-        <Link to="counter">Counter</Link>
+        <Link to="counters">Counter</Link>
       </header>
       <Outlet />
     </>
