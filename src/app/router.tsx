@@ -1,6 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import { store } from "./store";
-import App from "../App";
+import App from "../modules/app/App";
 import { UsersList } from "../modules/users/UsersList";
 import { SelectedUser } from "../modules/users/SelectedUser";
 import { fetchUsers } from "../modules/users/utils/fetch-users";

@@ -1,19 +1,8 @@
-import type { AppThunk } from "../../../app/store";
-import { usersSlice } from "../users.slice";
+import { createAppAsyncThunk } from "../../../app/store.types";
 
-export const fetchUsers =
-  ({ refetch }: { refetch?: boolean } = {}): AppThunk<Promise<void>> =>
-  async (dispatch, getState, { api }) => {
-    const isIdle = usersSlice.selectors.selectIsFetchUsersIdle(getState());
-    if (!isIdle && !refetch) return;
-
-    dispatch(usersSlice.actions.fetchUsersPending());
-    return api
-      .getUsers()
-      .then((users) => {
-        dispatch(usersSlice.actions.fetchUsersSuccess({ users }));
-      })
-      .catch(() => {
-        dispatch(usersSlice.actions.fetchUsersFailed());
-      });
-  };
+export const fetchUsers = createAppAsyncThunk(
+  "users/fetch",
+  async ({ refetch }: { refetch?: boolean } = {}, thunkAPI) => {
+    return thunkAPI.extra.api.getUsers();
+  }
+);
