@@ -9,13 +9,12 @@ export const fetchUser =
 
     if (isPending) return;
 
-    dispatch(usersSlice.actions.fetchUserPending());
-    api
-      .getUser(userId)
-      .then((user) => {
-        dispatch(usersSlice.actions.fetchUserSuccess({ user }));
-      })
-      .catch(() => {
-        dispatch(usersSlice.actions.fetchUserFailed());
-      });
+    // dispatch(usersSlice.actions.fetchUserPending());
+    api.getUser(userId);
+    // .then((user) => {
+    //   dispatch(usersSlice.actions.fetchUserSuccess({ user }));
+    // })
+    // .catch(() => {
+    //   dispatch(usersSlice.actions.fetchUserFailed());
+    // });
   };
