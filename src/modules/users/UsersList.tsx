@@ -1,21 +1,24 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { UserListItem } from "./UserListItem";
-import { useAppSelector } from "../../app/store.types";
-import { usersSlice } from "./users.slice";
+import { usersApi } from "./api/api";
 import "./UsersList.css";
 
 export function UsersList() {
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
-  const isPending = useAppSelector(
-    usersSlice.selectors.selectIsFetchUsersPending
-  );
+  const { data: users, isLoading } = usersApi.useGetUsersQuery();
 
-  const sortedUsers = useAppSelector((state) =>
-    usersSlice.selectors.selectSortedUsers(state, sortType)
-  );
+  const sortedUsers = useMemo(() => {
+    return [...(users ?? [])].sort((a, b) => {
+      if (sortType === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+  }, [sortType, users]);
 
-  if (isPending) return <div>Loading</div>;
+  if (isLoading) return <div>Loading</div>;
 
   return (
     <div className="container">
