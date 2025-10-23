@@ -7,12 +7,12 @@ export const fetchUsers = createAppAsyncThunk(
     return thunkAPI.extra.api.getUsers();
   },
   {
-    condition(params, { getState }) {
-      const isIdle = usersSlice.selectors.selectIsFetchUsersIdle(getState());
-      if (!params?.refetch && !isIdle) {
-        return false;
-      }
-      return true;
-    },
+    // condition(params, { getState }) {
+    //   const isIdle = usersSlice.selectors.selectIsFetchUsersIdle(getState());
+    //   if (!params?.refetch && !isIdle) {
+    //     return false;
+    //   }
+    //   return true;
+    // },
   }
 );

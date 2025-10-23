@@ -4,22 +4,16 @@ import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
 import { deleteUser } from "./utils/delete-user";
 import "./SelectedUser.css";
+import { usersApi } from "./api/api";
 
 export function SelectedUser() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { id = "" } = useParams<{ id: UserId }>();
-
-  const isPending = useAppSelector(
-    usersSlice.selectors.selectIsFetchUserPending
-  );
+  const { data: user, isLoading: isLoadingUser } = usersApi.useGetUserQuery(id);
 
   const isDeletePending = useAppSelector(
     usersSlice.selectors.selectIsDeleteUserPending
-  );
-
-  const user = useAppSelector((state) =>
-    usersSlice.selectors.selectUserById(state, id)
   );
 
   const handleBackButtonClick = () => {
@@ -33,7 +27,7 @@ export function SelectedUser() {
     dispatch(deleteUser(id)).then(() => navigate("..", { relative: "path" }));
   };
 
-  if (isPending || !user) {
+  if (isLoadingUser || !user) {
     return <div>Loading...</div>;
   }
   return (
