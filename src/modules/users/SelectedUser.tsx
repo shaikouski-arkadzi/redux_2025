@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { skipToken } from "@reduxjs/toolkit/query";
 import type { UserId } from "./user.types";
 import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
@@ -9,8 +10,10 @@ import { usersApi } from "./api/api";
 export function SelectedUser() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { id = "" } = useParams<{ id: UserId }>();
-  const { data: user, isLoading: isLoadingUser } = usersApi.useGetUserQuery(id);
+  const { id } = useParams<{ id: UserId }>();
+  const { data: user, isLoading: isLoadingUser } = usersApi.useGetUserQuery(
+    id ?? skipToken
+  );
 
   const isDeletePending = useAppSelector(
     usersSlice.selectors.selectIsDeleteUserPending
@@ -24,7 +27,9 @@ export function SelectedUser() {
     if (!id) {
       return;
     }
-    dispatch(deleteUser(id)).then(() => navigate("..", { relative: "path" }));
+    dispatch(deleteUser(id ?? "")).then(() =>
+      navigate("..", { relative: "path" })
+    );
   };
 
   if (isLoadingUser || !user) {
