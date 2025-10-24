@@ -9,6 +9,9 @@ export const usersApi = baseApi.injectEndpoints({
     getUser: create.query<User, UserId>({
       query: (userId) => `/users/${userId}`,
     }),
+    deleteUser: create.mutation<void, UserId>({
+      query: (userId) => ({ method: "DELETE", url: `/users/${userId}` }),
+    }),
   }),
   overrideExisting: true,
 });
