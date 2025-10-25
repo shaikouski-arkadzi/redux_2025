@@ -5,17 +5,23 @@ export const usersApi = baseApi.injectEndpoints({
   endpoints: (create) => ({
     getUsers: create.query<User[], void>({
       query: () => "/users",
-      providesTags: ["users"],
+      providesTags: ["users", { type: "users", id: "list" }],
     }),
     getUser: create.query<User, UserId>({
       query: (userId) => `/users/${userId}`,
-      providesTags: ["users"],
+      providesTags: (user, error, userId) => [
+        "users",
+        { type: "users", id: userId },
+      ],
     }),
     deleteUser: create.mutation<void, UserId>({
       query: (userId) => ({ method: "DELETE", url: `/users/${userId}` }),
       // Marks all api with this tag like invalidate,
       // Remove cache and refetch data from api
-      invalidatesTags: ["users"],
+      invalidatesTags: (user, error, userId) => [
+        { type: "users", id: "list" },
+        { type: "users", id: userId },
+      ],
     }),
   }),
   overrideExisting: true,
