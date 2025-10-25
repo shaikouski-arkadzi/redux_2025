@@ -20,7 +20,8 @@ export function SelectedUser() {
 
   const handleDeleteButtonClick = async () => {
     if (!id) return;
-    deleteUser(id);
+    await deleteUser(id);
+    navigate("..", { relative: "path" });
   };
 
   if (isLoadingUser || !user) {
