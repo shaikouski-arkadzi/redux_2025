@@ -23,8 +23,10 @@ export const router = createBrowserRouter([
         path: "users",
         element: <UsersList />,
         loader: () => {
-          loadStore().then(() => {
-            usersApi.endpoints.getUsers.select()(store.getState());
+          loadStore().then(async () => {
+            await store
+              .dispatch(usersApi.endpoints.getUsers.initiate())
+              .unwrap();
           });
           return null;
         },
