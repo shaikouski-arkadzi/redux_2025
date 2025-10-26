@@ -3,16 +3,22 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import type { UserId } from "./user.types";
 import { usersApi } from "./api/api";
 import "./SelectedUser.css";
+import { useAppDispatch, useAppSelector } from "../../app/store.types";
+import { deleteUser } from "./utils/delete-user";
 
 export function SelectedUser() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: UserId }>();
   const { data: user, isLoading: isLoadingUser } = usersApi.useGetUserQuery(
     id ?? skipToken
   );
 
-  const [deleteUser, { isLoading: isLoadingDelete }] =
-    usersApi.useDeleteUserMutation();
+  // Get state of mutation
+  const isLoadingDelete = useAppSelector(
+    (state) =>
+      usersApi.endpoints.deleteUser.select(id ?? skipToken)(state).isLoading
+  );
 
   const handleBackButtonClick = () => {
     navigate("..", { relative: "path" });
@@ -20,8 +26,7 @@ export function SelectedUser() {
 
   const handleDeleteButtonClick = async () => {
     if (!id) return;
-    await deleteUser(id);
-    navigate("..", { relative: "path" });
+    await dispatch(deleteUser(id));
   };
 
   if (isLoadingUser || !user) {

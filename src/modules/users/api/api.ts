@@ -27,10 +27,7 @@ export const usersApi = baseApi.injectEndpoints({
       query: (userId) => ({ method: "DELETE", url: `/users/${userId}` }),
       // Marks all api with this tag like invalidate,
       // Remove cache and refetch data from api
-      invalidatesTags: (user, error, userId) => [
-        { type: "users", id: "list" },
-        { type: "users", id: userId },
-      ],
+      invalidatesTags: (user, error, userId) => [],
     }),
   }),
   overrideExisting: true,
