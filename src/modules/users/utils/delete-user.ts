@@ -8,5 +8,7 @@ export const deleteUser =
     // Run mutation from Thunk
     await dispatch(usersApi.endpoints.deleteUser.initiate(userId));
     await router.navigate("/users");
-    await dispatch(usersApi.util.invalidateTags(["users"]));
+    await dispatch(
+      usersApi.util.invalidateTags([{ type: "users", id: "list" }])
+    );
   };
