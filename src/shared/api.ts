@@ -5,7 +5,7 @@ const baseUrl = "http://localhost:3002";
 
 export const baseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
-  tagTypes: ['users']
+  tagTypes: ["users"],
   endpoints: () => ({}),
 });
 
