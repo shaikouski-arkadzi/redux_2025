@@ -24,6 +24,7 @@ export const getUserQueryOptions = (userId: UserId) => {
     queryKey: ["user", userId],
     queryFn: () =>
       baseFetch(`users/${userId}`).then((res) => UserDtoSchema.parse(res)),
+    enabled: Boolean(userId),
   });
 };
 

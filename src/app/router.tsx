@@ -20,16 +20,18 @@ export const router = createBrowserRouter([
         path: "users",
         element: <UsersList />,
         loader: () => {
-          loadStore().then(async () => {});
-          return null;
+          loadStore().then(async () => {
+            return null;
+          });
         },
       },
       {
         path: "users/:id",
         element: <SelectedUser />,
-        loader: ({ params }) => {
-          loadStore().then(() => {});
-          return null;
+        loader: () => {
+          loadStore().then(() => {
+            return null;
+          });
         },
       },
       {

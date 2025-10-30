@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../app/store.types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAppDispatch } from "../../app/store.types";
 import type { UserId } from "./user.types";
-import { usersSlice } from "./users.slice";
+import { getUserQueryOptions } from "./api";
+import { deleteUser } from "./delete-user";
 import "./SelectedUser.css";
 
 export function SelectedUser() {
@@ -10,21 +12,23 @@ export function SelectedUser() {
 
   const { id } = useParams<{ id: UserId }>();
 
-  const user = useAppSelector((state) =>
-    usersSlice.selectors.userById(state, id ?? "")
-  );
+  const { data: user } = useQuery(getUserQueryOptions(id ?? ""));
+
+  const deleteUserMutation = useMutation({
+    mutationFn: async () => {
+      if (!id) {
+        return;
+      }
+      await dispatch(deleteUser(id));
+    },
+  });
 
   const handleBackButtonClick = () => {
-    dispatch(usersSlice.actions.selectRemove());
     navigate("..", { relative: "path" });
   };
 
   const handleDeleteButtonClick = async () => {
-    if (!id) {
-      return;
-    }
-    dispatch(usersSlice.actions.deleteUser({ userId: id }));
-    navigate("..", { relative: "path" });
+    deleteUserMutation.mutate();
   };
 
   return (
@@ -32,8 +36,8 @@ export function SelectedUser() {
       <button onClick={handleBackButtonClick} className="btn">
         Back
       </button>
-      <h2 className="user-name">{user.name}</h2>
-      <p className="user-description">{user.description}</p>
+      <h2 className="user-name">{user?.name}</h2>
+      <p className="user-description">{user?.description}</p>
       <button
         onClick={handleDeleteButtonClick}
         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"

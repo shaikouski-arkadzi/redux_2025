@@ -5,7 +5,7 @@ import type { UserId } from "./user.types";
 
 export const deleteUser =
   (userId: UserId): AppThunk<Promise<void>> =>
-  async (_, _, { router }) => {
+  async (dispatch, _, { router }) => {
     await deleteUser(userId);
     await router.navigate("/users");
     await queryClient.invalidateQueries({
