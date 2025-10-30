@@ -4,6 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import type { User, UserId } from "./user.types";
+import { rootReducer } from "../../app/rootReducer";
 
 export const initialUsersList: User[] = Array.from(
   { length: 3000 },
@@ -85,4 +86,4 @@ export const usersSlice = createSlice({
       state.ids = state.ids.filter((id) => !userIds.includes(id));
     },
   },
-});
+}).injectInto(rootReducer);

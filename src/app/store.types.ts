@@ -9,7 +9,8 @@ import {
 import type { store } from "./store";
 import type { extraArgument } from "./extra-arguments";
 
-export type AppState = ReturnType<typeof store.getState>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AppState = any;
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppSelector = useSelector.withTypes<AppState>();
