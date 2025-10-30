@@ -1,16 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import { UserListItem } from "./UserListItem";
-import { useAppDispatch, useAppSelector } from "../../app/store.types";
+import {
+  useAppDispatch,
+  useAppSelector,
+  type AppState,
+} from "../../app/store.types";
 import { sortUsersSlice } from "./sort-users.slice";
 import { selectCountersSum } from "../counters";
-import { selectSortedUsers } from "./select-sorted-users";
+import { sortUsers } from "./select-sorted-users";
 import { deleteCountersUsers } from "./delete-counters-users";
+import { getUsersQueryOptions } from "./api";
 import "./UsersList.css";
+import { useMemo } from "react";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
 
-  const countersSum = useAppSelector(selectCountersSum);
-  const sortedUsers = useAppSelector(selectSortedUsers);
+  const { data: users } = useQuery(getUsersQueryOptions());
+
+  const sortType = useAppSelector(sortUsersSlice.selectors.sortType);
+
+  const selectCountersSumFromAppState = (state: AppState) =>
+    selectCountersSum(state.counters);
+
+  const countersSum = useAppSelector(selectCountersSumFromAppState);
+
+  const sortedUsers = useMemo(() => {
+    return sortUsers(sortType, users ?? []);
+  }, [users, sortType]);
 
   return (
     <div className="container">
