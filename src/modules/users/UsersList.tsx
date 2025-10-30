@@ -7,15 +7,9 @@ import "./UsersList.css";
 export function UsersList() {
   const [sortType, setSortType] = useState<"asc" | "desc">("asc");
 
-  const isPending = useAppSelector(
-    usersSlice.selectors.selectIsFetchUsersPending
-  );
-
   const sortedUsers = useAppSelector((state) =>
     usersSlice.selectors.selectSortedUsers(state, sortType)
   );
-
-  if (isPending) return <div>Loading</div>;
 
   return (
     <div className="container">
