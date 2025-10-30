@@ -1,25 +1,38 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { UserListItem } from "./UserListItem";
-import { useAppSelector } from "../../app/store.types";
+import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
+import { sortUsersSlice } from "./sort-users.slice";
 import "./UsersList.css";
 
 export function UsersList() {
-  const [sortType, setSortType] = useState<"asc" | "desc">("asc");
+  const dispatch = useAppDispatch();
 
-  const sortedUsers = useAppSelector((state) =>
-    usersSlice.selectors.selectSortedUsers(state, sortType)
-  );
+  const users = useAppSelector(usersSlice.selectors.usersList);
+  const sortType = useAppSelector(sortUsersSlice.selectors.sortType);
+
+  const sortedUsers = useMemo(() => {
+    return [...(users ?? [])].sort((a, b) => {
+      if (sortType === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+  }, [users, sortType]);
 
   return (
     <div className="container">
       <div className="user-list-container">
         <div className="sort-buttons">
-          <button onClick={() => setSortType("asc")} className="btn">
+          <button
+            onClick={() => dispatch(sortUsersSlice.actions.setSortType("asc"))}
+            className="btn"
+          >
             Asc
           </button>
           <button
-            onClick={() => setSortType("desc")}
+            onClick={() => dispatch(sortUsersSlice.actions.setSortType("desc"))}
             className="btn btn-spacing"
           >
             Desc

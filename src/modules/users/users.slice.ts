@@ -50,22 +50,13 @@ export const usersSlice = createSlice({
   selectors: {
     selectSelectedUser: (state) =>
       state.selectedUserId ? state.entries[state.selectedUserId] : undefined,
-    userById: (state, userId: UserId) => state.entries[userId],
-    selectSortedUsers: createSelector(
+    usersList: createSelector(
       (state: UsersState) => state.ids,
       (state: UsersState) => state.entries,
-      (_: UsersState, sort: "asc" | "desc") => sort,
-      (ids, entries, sort) =>
-        ids
-          .map((id) => entries[id])
-          .sort((a, b) => {
-            if (sort === "asc") {
-              return a.name.localeCompare(b.name);
-            } else {
-              return b.name.localeCompare(a.name);
-            }
-          })
+      (ids, entities) =>
+        ids.map((id) => entities[id]).filter((user): user is User => !!user)
     ),
+    userById: (state, userId: UserId) => state.entries[userId],
   },
   reducers: {
     selected: (state, action: PayloadAction<{ userId: UserId }>) => {
@@ -82,6 +73,11 @@ export const usersSlice = createSlice({
         return acc;
       }, {} as Record<UserId, User>);
       state.ids = users.map((user) => user.id);
+    },
+    deleteUser: (state, action: PayloadAction<{ userId: UserId }>) => {
+      const { userId } = action.payload;
+      delete state.entries[userId];
+      state.ids = state.ids.filter((id) => id !== userId);
     },
   },
 });
