@@ -19,6 +19,14 @@ export function SelectedUser() {
     navigate("..", { relative: "path" });
   };
 
+  const handleDeleteButtonClick = async () => {
+    if (!id) {
+      return;
+    }
+    dispatch(usersSlice.actions.deleteUser({ userId: id }));
+    navigate("..", { relative: "path" });
+  };
+
   return (
     <div className="selected-user-container">
       <button onClick={handleBackButtonClick} className="btn">
@@ -26,6 +34,12 @@ export function SelectedUser() {
       </button>
       <h2 className="user-name">{user.name}</h2>
       <p className="user-description">{user.description}</p>
+      <button
+        onClick={handleDeleteButtonClick}
+        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Delete
+      </button>
     </div>
   );
 }
