@@ -1,10 +1,10 @@
 import { UserListItem } from "./UserListItem";
 import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { sortUsersSlice } from "./sort-users.slice";
-import { selectCountersSum } from "./select-counters";
+import { selectCountersSum } from "../counters";
 import { selectSortedUsers } from "./select-sorted-users";
-import "./UsersList.css";
 import { deleteCountersUsers } from "./delete-counters-users";
+import "./UsersList.css";
 
 export function UsersList() {
   const dispatch = useAppDispatch();

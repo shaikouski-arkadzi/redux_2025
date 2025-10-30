@@ -1,5 +1,4 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-import type { AppState } from "../../app/store.types";
 
 type CounterState = {
   counter: number;
@@ -44,5 +43,13 @@ export const countersReducer = createReducer(
   }
 );
 
-export const selectCounter = (state: AppState, counterId: CounterId) =>
-  state.counters[counterId];
+export const selectCounter = (state: CountersState, counterId: CounterId) =>
+  state[counterId];
+
+export const selectCountersSum = (counters: CountersState) =>
+  Math.max(
+    Object.values(counters).reduce((acc, counter) => {
+      return acc + (counter?.counter ?? 0);
+    }, 0),
+    0
+  );

@@ -12,7 +12,7 @@ export function Counter({ counterId }: { counterId: CounterId }) {
   const dispatch = useDispatch();
 
   const counterState = useAppSelector((state) =>
-    selectCounter(state, counterId)
+    selectCounter(state.counters, counterId)
   );
 
   const actions = bindActionCreators(

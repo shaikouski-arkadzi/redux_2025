@@ -1,6 +1,5 @@
 import type { AppThunk } from "../../app/store.types";
-import { resetAction } from "../counters/counters.slice";
-import { selectCountersSum } from "./select-counters";
+import { resetAction, selectCountersSum } from "../counters";
 import { selectSortedUsers } from "./select-sorted-users";
 import { usersSlice } from "./users.slice";
 
