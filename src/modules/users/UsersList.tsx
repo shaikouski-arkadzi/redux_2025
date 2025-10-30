@@ -4,6 +4,7 @@ import { sortUsersSlice } from "./sort-users.slice";
 import { selectCountersSum } from "./select-counters";
 import { selectSortedUsers } from "./select-sorted-users";
 import "./UsersList.css";
+import { deleteCountersUsers } from "./delete-counters-users";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
@@ -28,7 +29,10 @@ export function UsersList() {
             Desc
           </button>
           {countersSum !== 0 && (
-            <button className="btn btn-spacing">
+            <button
+              onClick={() => dispatch(deleteCountersUsers())}
+              className="btn btn-spacing"
+            >
               Delete counter sum {countersSum}
             </button>
           )}
