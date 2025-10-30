@@ -1,27 +1,15 @@
-import { useMemo } from "react";
 import { UserListItem } from "./UserListItem";
 import { useAppDispatch, useAppSelector } from "../../app/store.types";
-import { usersSlice } from "./users.slice";
 import { sortUsersSlice } from "./sort-users.slice";
-import "./UsersList.css";
 import { selectCountersSum } from "./select-counters";
+import { selectSortedUsers } from "./select-sorted-users";
+import "./UsersList.css";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
 
-  const users = useAppSelector(usersSlice.selectors.usersList);
-  const sortType = useAppSelector(sortUsersSlice.selectors.sortType);
   const countersSum = useAppSelector(selectCountersSum);
-
-  const sortedUsers = useMemo(() => {
-    return [...(users ?? [])].sort((a, b) => {
-      if (sortType === "asc") {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
-  }, [users, sortType]);
+  const sortedUsers = useAppSelector(selectSortedUsers);
 
   return (
     <div className="container">
