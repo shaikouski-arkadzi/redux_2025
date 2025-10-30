@@ -4,12 +4,14 @@ import { useAppDispatch, useAppSelector } from "../../app/store.types";
 import { usersSlice } from "./users.slice";
 import { sortUsersSlice } from "./sort-users.slice";
 import "./UsersList.css";
+import { selectCountersSum } from "./select-counters";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
 
   const users = useAppSelector(usersSlice.selectors.usersList);
   const sortType = useAppSelector(sortUsersSlice.selectors.sortType);
+  const countersSum = useAppSelector(selectCountersSum);
 
   const sortedUsers = useMemo(() => {
     return [...(users ?? [])].sort((a, b) => {
@@ -37,6 +39,11 @@ export function UsersList() {
           >
             Desc
           </button>
+          {countersSum !== 0 && (
+            <button className="btn btn-spacing">
+              Delete counter sum {countersSum}
+            </button>
+          )}
         </div>
         <ul className="user-list">
           {sortedUsers.map((user) => (
