@@ -1,4 +1,6 @@
 import z from "zod";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { User, UserId } from "../modules/users/user.types";
 
 const baseUrl = "http://localhost:3002";
 
@@ -8,24 +10,27 @@ const UserDtoSchema = z.object({
   description: z.string(),
 });
 
-export const api = {
-  getUsers: () => {
-    return fetch(`${baseUrl}/users`)
-      .then((response) => response.json())
-      .then((res) => {
-        return UserDtoSchema.array().parse(res);
-      });
-  },
-  getUser: (userId: string) => {
-    return fetch(`${baseUrl}/users/${userId}`)
-      .then((response) => response.json())
-      .then((res) => {
-        return UserDtoSchema.parse(res);
-      });
-  },
-  deleteUser: (userId: string) => {
-    return fetch(`${baseUrl}/users/${userId}`, {
-      method: "DELETE",
-    }).then((response) => response.json());
-  },
-};
+export const baseApi = createApi({
+  baseQuery: fetchBaseQuery({ baseUrl }),
+  tagTypes: ["Users"],
+  endpoints: () => ({}),
+});
+
+export const usersApi = baseApi.injectEndpoints({
+  endpoints: (create) => ({
+    getUsers: create.query<User[], void>({
+      query: () => "/users",
+      providesTags: ["Users", { type: "Users", id: "LIST" }],
+      transformResponse: (res: unknown) => UserDtoSchema.array().parse(res),
+    }),
+    getUser: create.query<User, UserId>({
+      query: (userId) => `/users/${userId}`,
+      providesTags: ["Users"],
+      transformResponse: (res: unknown) => UserDtoSchema.parse(res),
+    }),
+    deleteUser: create.mutation<void, UserId>({
+      query: (userId) => ({ method: "DELETE", url: `/users/${userId}` }),
+    }),
+  }),
+  overrideExisting: true,
+});
