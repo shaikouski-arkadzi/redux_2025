@@ -1,4 +1,5 @@
 import type { AppThunk } from "../../app/store.types";
+import { resetAction } from "../counters/counters.slice";
 import { selectCountersSum } from "./select-counters";
 import { selectSortedUsers } from "./select-sorted-users";
 import { usersSlice } from "./users.slice";
@@ -15,4 +16,6 @@ export const deleteCountersUsers =
         userIds: usersToDelete.map((user) => user.id),
       })
     );
+
+    dispatch(resetAction());
   };

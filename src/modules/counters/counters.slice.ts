@@ -17,6 +17,8 @@ export const decrementAction = createAction<{
   counterId: CounterId;
 }>("counters/decrement");
 
+export const resetAction = createAction("counters/reset");
+
 const initialCounterState: CounterState = { counter: 0 };
 const initialCountersState: CountersState = {};
 
@@ -35,6 +37,9 @@ export const countersReducer = createReducer(
       if (!state[counterId]) state[counterId] = { ...initialCounterState };
 
       state[counterId].counter--;
+    });
+    builder.addCase(resetAction, () => {
+      return initialCountersState;
     });
   }
 );
