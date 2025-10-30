@@ -1,9 +1,8 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import { store } from "./store";
 import App from "../modules/app/App";
-import { UsersList } from "../modules/users/UsersList";
-import { SelectedUser } from "../modules/users/SelectedUser";
-import { Counters } from "../modules/counters/Counters";
+import { SelectedUser, UsersList } from "../modules/users";
+import { Counters } from "../modules/counters";
 import { usersApi } from "../shared/api";
 
 const loadStore = () =>
